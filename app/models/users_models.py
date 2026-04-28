@@ -15,6 +15,7 @@ class UserRole(str, PyEnum):
 
 
 class UserPlan(str, PyEnum):
+    ESSENTIAL = "essential"
     STARTER = "starter"
     PRO = "pro"
     PREMIUM = "premium"

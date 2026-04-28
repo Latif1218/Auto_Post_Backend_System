@@ -6,7 +6,15 @@ from sqlalchemy.orm import sessionmaker
 from .config import DATABASE_URL
 
 
-engine = create_engine(DATABASE_URL)
+
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,      # Checks if connection is alive before using it
+    pool_size=10,            # Adjust based on your load
+    max_overflow=20,         # Allow extra connections during spikes
+    pool_timeout=30,         # Wait 30s for a connection before failing
+    connect_args={"sslmode": "require"} # Essential for Supabase
+)
 seasionlocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
