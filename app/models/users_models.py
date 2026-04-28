@@ -47,3 +47,4 @@ class User(Base):
 
 
     reset_code = relationship("PasswordResetCode", back_populates="user")
+    businesses = relationship("Business", back_populates="user")
