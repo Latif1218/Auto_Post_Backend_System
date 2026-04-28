@@ -46,7 +46,8 @@ def onboarding_business(
         industry=payload.industry,
         location=payload.location,
         services=payload.services,
-        tone=payload.tone
+        tone=payload.tone,
+        brand_color=payload.brand_color
     )
     db.add(business)
     db.commit()

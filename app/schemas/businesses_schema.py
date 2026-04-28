@@ -20,6 +20,22 @@ class IndustryType(str, Enum):
     OTHER = "Other"
 
 
+class BrandTone(str, Enum):
+    PROFESSIONAL = "Professional"
+    FRIENDLY = "Friendly"
+    BOLD_ENERGETIC = "Bold & Energetic"
+    LUXURY = "Luxury"
+
+class BrandColor(str, Enum):
+    ORANGE = "#FF5733"
+    BLUE = "#3B82F6"
+    PURPLE = "#8B5CF6"
+    GREEN = "#10B981"
+    YELLOW = "#F59E0B"
+    RED = "#EF4444"
+    PINK = "#EC4899"
+    DARK = "#374151"
+
 
 
 class BusinessOnboardingRequest(BaseModel):
@@ -27,7 +43,8 @@ class BusinessOnboardingRequest(BaseModel):
     industry: Optional[IndustryType] = None
     location: Optional[str] = None
     services: Optional[str] = None
-    tone: Optional[str] = None
+    tone: Optional[BrandTone] = None  
+    brand_color: Optional[BrandColor] = None
 
 
 
@@ -39,7 +56,8 @@ class BusinessOnboardingResponse(BaseModel):
     industry: Optional[IndustryType]
     location: Optional[str]
     services: Optional[str]
-    tone: Optional[str]
+    tone: Optional[BrandTone]          
+    brand_color: Optional[BrandColor] 
     created_at: datetime
 
     class Config:
