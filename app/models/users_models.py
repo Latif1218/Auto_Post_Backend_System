@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Boolean, TIMESTAMP, text, DateTime, Integer, Enum
+from sqlalchemy import Column, String, Boolean, TIMESTAMP, text, DateTime, Enum
 from datetime import datetime
 from sqlalchemy.orm import relationship
 from ..database import Base
@@ -46,4 +46,4 @@ class User(Base):
     otp_expires_at = Column(DateTime, nullable=True)
 
 
-    
+    reset_code = relationship("PasswordResetCode", back_populates="user")
