@@ -1,7 +1,7 @@
 from fastapi import FastAPI, status
 from contextlib import asynccontextmanager
 from .database import Base, engine, check_database_health
-from .routers import register_user
+from .routers import register_user, login_user
 
 # 1. Use lifespan for cleaner startup/shutdown
 @asynccontextmanager
@@ -33,3 +33,4 @@ def health():
 
 
 app.include_router(register_user.router)
+app.include_router(login_user.router)

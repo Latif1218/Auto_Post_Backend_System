@@ -4,8 +4,8 @@ from jwt import ExpiredSignatureError, PyJWTError
 from fastapi import Depends, status, HTTPException
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
-from ..schemas import users_schema
-from ..models import users_model
+from ..schemas import users_schemas
+from ..models import users_models
 from ..database import get_db
 from ..utils.hashing import verify_password
 from typing import Optional, Annotated
@@ -23,8 +23,8 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 
 def get_user(db: Session, username: str):
-    user = db.query(users_model.User).filter(
-        users_model.User.email == username
+    user = db.query(users_models.User).filter(
+        users_models.User.email == username
     ).first()
 
     return user
@@ -81,7 +81,7 @@ def get_google_user_info(access_token: str):
 def get_current_user(
     db: Annotated[ Session, Depends(get_db)],
     token: str = Depends(oauth2_schema)
-) -> users_model.User:
+) -> users_models.User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -94,7 +94,7 @@ def get_current_user(
         if user_id is None:
             raise credentials_exception from None
         
-        token_data = users_schema.TokenData(id = user_id)
+        token_data = users_schemas.TokenData(id = user_id)
 
     except ExpiredSignatureError as e:
         raise HTTPException(
@@ -106,8 +106,8 @@ def get_current_user(
     except PyJWTError as e:
         raise credentials_exception from e
     
-    user = db.query(users_model.User).filter(
-        users_model.User.id == token_data.id
+    user = db.query(users_models.User).filter(
+        users_models.User.id == token_data.id
     ).first()
     if user is None:
         raise credentials_exception from None
@@ -118,7 +118,7 @@ def get_current_user(
 
 
 def get_current_active_user(
-        current_user: Annotated[users_model.User, Depends(get_current_user)]
+        current_user: Annotated[users_models.User, Depends(get_current_user)]
 ):
     if current_user.disabled: 
         raise HTTPException(
@@ -130,8 +130,8 @@ def get_current_active_user(
 
 
 def update_user(db: Session, user_id: int, update_data: dict):
-    user = db.query(users_model.User).filter(
-        users_model.User.id == user_id
+    user = db.query(users_models.User).filter(
+        users_models.User.id == user_id
     ).first()
 
     if not user:
@@ -150,8 +150,8 @@ def update_user(db: Session, user_id: int, update_data: dict):
 
 
 def get_current_admin_user(
-        current_user: Annotated[users_model.User, Depends(get_current_user)]
-)-> users_model.User:
+        current_user: Annotated[users_models.User, Depends(get_current_user)]
+)-> users_models.User:
     if not current_user:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -167,9 +167,9 @@ def get_current_admin_user(
 
 
 def get_current_tutor_user(
-        current_user: Annotated[users_model.User , Depends(get_current_user)]
-) -> users_model.User:
-    if current_user.role != users_model.UserRole.TUTOR:
+        current_user: Annotated[users_models.User , Depends(get_current_user)]
+) -> users_models.User:
+    if current_user.role != users_models.UserRole.TUTOR:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Tutor access required"
