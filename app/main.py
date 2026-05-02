@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from .database import Base, engine, check_database_health
-from .routers import register_user, login_user, forgot_password, business_onboarding_router
+from .routers import register_user, login_user, forgot_password, business_onboarding_router, subscriptiion
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
@@ -69,3 +69,4 @@ app.include_router(register_user.router)
 app.include_router(login_user.router)
 app.include_router(forgot_password.router)
 app.include_router(business_onboarding_router.router)
+app.include_router(subscriptiion.router)

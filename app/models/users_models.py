@@ -48,3 +48,4 @@ class User(Base):
 
     reset_code = relationship("PasswordResetCode", back_populates="user")
     businesses = relationship("Business", back_populates="user")
+    subscription = relationship("Subscription", back_populates="user", uselist=False)
